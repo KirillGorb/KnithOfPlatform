@@ -8909,7 +8909,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &479505501
 Transform:
   m_ObjectHideFlags: 0
@@ -45591,7 +45591,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _levels.Array.data[12].Level
       value: 
-      objectReference: {fileID: 365447097}
+      objectReference: {fileID: 479505500}
     - target: {fileID: 4592293535815245437, guid: 5ede9dc5438faa64cad0e2fb799b892f,
         type: 3}
       propertyPath: _levels.Array.data[12].SavePoint
