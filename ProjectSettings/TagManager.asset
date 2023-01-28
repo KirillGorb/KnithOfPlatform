@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Coin
   - Spike
+  - Jumpl
   layers:
   - Default
   - TransparentFX

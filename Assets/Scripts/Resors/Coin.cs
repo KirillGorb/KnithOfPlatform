@@ -8,35 +8,43 @@ public class Coin : ScriptableObject, IResors
 
     public int CountResorses { get; set; }
 
-    private int _countResors = 0;
+    private int _localCountResorses = 0;
 
-    public void Init(Action<string> changer)
+    public void Init(Action<string> changer, ref Action<Collider2D> onPuckEvent, ref Action<Collider2D> OnFinishEvent)
     {
-        _countResors = 0;
         ChangeResors += changer;
-
         ChangeResors?.Invoke(CountResorses + "");
+
+        _localCountResorses = 0;
+
+        onPuckEvent += PuckUpCoin;
+        OnFinishEvent += SaveResolt;
     }
 
-    public void DestroyEvent(Action<string> changer)
+    private void PuckUpCoin(Collider2D other)
     {
-        ChangeResors -= changer;
+        if (other.CompareTag("Coin"))
+        {
+            Destroy(other.gameObject);
+            PuckUpResors();
+        }
     }
 
-    public void SaveResolt()
+    private void SaveResolt(Collider2D other)
     {
-        CountResorses += _countResors;
+        if (other.CompareTag("Finish"))
+            CountResorses += _localCountResorses;
     }
 
     public void PuckDownResors(int countResors = 1)
     {
-        _countResors -= countResors;
-        ChangeResors?.Invoke(_countResors + CountResorses + "");
+        _localCountResorses -= countResors;
+        ChangeResors?.Invoke(_localCountResorses + CountResorses + "");
     }
 
     public void PuckUpResors(int countResors = 1)
     {
-        _countResors += countResors;
-        ChangeResors?.Invoke(_countResors + CountResorses + "");
+        _localCountResorses += countResors;
+        ChangeResors?.Invoke(_localCountResorses + CountResorses + "");
     }
 }

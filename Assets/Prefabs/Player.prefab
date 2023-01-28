@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 387269680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.36, y: 1.63, z: 0}
+  m_LocalPosition: {x: 0.42, y: 1.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2092912071393074498}
@@ -135,10 +135,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 203178757
+  m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 6095532798768231063, guid: 01aa911716707424688aa593118f0da4,
+  m_Sprite: {fileID: -8812331883194539583, guid: 300257eec244cf8448cff0bdb2f5c2b1,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -219,15 +219,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveCharacter:
+    _gravityScale: 4
+    _jump:
+      JumpScale: 5
+      StartHightJump: 0.5
     _speed: 3
-    _gravitation: 257.4
-    _velocityJump: 600
-    _hightJump: 0.4
+  _groundChecker:
     _checkPlanceRadius: 0.1
     _checkGroundPoint: {fileID: 1316172659}
     _layersGrounds:
       serializedVersion: 2
-      m_Bits: 256
+      m_Bits: 1792
   _playerAinmation: {fileID: 2092912071393074496}
 --- !u!114 &8881912202889463491
 MonoBehaviour:
@@ -236,7 +238,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2092912071393074497}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cb229dcd1dc1ee4ebd0a0c088820c30, type: 3}
   m_Name: 
@@ -258,7 +260,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f78e8f220ad7734685c708a26052bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _save: {fileID: 11400000, guid: f1f71fc29ff24f34888e1468b4fd962c, type: 2}
+  _coins: {fileID: 11400000, guid: 9e9b0af8e1821f142848ee16ee647dca, type: 2}
+  _saves: {fileID: 11400000, guid: f1f71fc29ff24f34888e1468b4fd962c, type: 2}
+  _textChanger:
+    _textChangeResors: {fileID: 0}
+  _rection:
+    _jump:
+      JumpScale: 9
+      StartHightJump: 0.5
+    _player: {fileID: 1512836456}
   _levels:
   - Level: {fileID: 0}
     SavePoint: {fileID: 0}
@@ -266,6 +276,28 @@ MonoBehaviour:
     SavePoint: {fileID: 0}
   - Level: {fileID: 0}
     SavePoint: {fileID: 0}
-  _detectionCountCoin:
-    _textChangeResors: {fileID: 0}
-  _coin: {fileID: 11400000, guid: 9e9b0af8e1821f142848ee16ee647dca, type: 2}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  - Level: {fileID: 0}
+    SavePoint: {fileID: 0}
+  _lives: 2

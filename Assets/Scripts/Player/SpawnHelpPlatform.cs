@@ -14,24 +14,31 @@ public class SpawnHelpPlatform : MonoBehaviour
 
     private void Start()
     {
-        _scaleUpPlatformInSecond = _startScale;
+        SetStartParametr();
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            _pref = Instantiate(_platforma, _spawnPlatformPoint.position, Quaternion.Euler(0, 0, 90));
-            _scaleUpPlatformInSecond = _startScale;
-        }
-        if (Input.GetMouseButton(0))
-        {
-            if (_scaleUpPlatformInSecond <= _maxScale)
-            {
-                _scaleUpPlatformInSecond += Time.deltaTime;
-            }
+        if (Input.GetMouseButtonDown(0)) SpawnPlatform();
+        if (Input.GetMouseButton(0)) ScaleUpPlatform();
+    }
 
-            _pref.transform.localScale = new Vector3(_scaleUpPlatformInSecond, 0.31f, 1f);
-        }
+    private void SetStartParametr()
+    {
+        _scaleUpPlatformInSecond = _startScale;
+    }
+
+    private void SpawnPlatform()
+    {
+        _pref = Instantiate(_platforma, _spawnPlatformPoint.position, Quaternion.Euler(0, 0, 90));
+        SetStartParametr();
+    }
+
+    private void ScaleUpPlatform()
+    {
+        if (_scaleUpPlatformInSecond <= _maxScale)
+            _scaleUpPlatformInSecond += Time.deltaTime;
+
+        _pref.transform.localScale = new Vector3(_scaleUpPlatformInSecond, 0.31f, 1f);
     }
 }

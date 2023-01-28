@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MoveSaw : MonoBehaviour
+public class MoveObjectAtPoints : MonoBehaviour
 {
     [SerializeField] private Transform[] _movePoints;
 

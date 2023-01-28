@@ -1,62 +1,178 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class TriggerControler : MonoBehaviour
 {
-    [SerializeField] private Save _save;
+    private event Action<Collider2D, bool> OnDebugEvects;//событие на все плохое
+    private event Action<Collider2D> OnFinishEvent;//событие финиша
+    private event Action<Collider2D> OnPuckEvent;//событие подборки
+
+    [SerializeField] private Coin _coins;
+    [SerializeField] private Save _saves;
+
+    [SerializeField] private TextDetection _textChanger;
+    [SerializeField] private RectionAtObject _rection;
     [SerializeField] private List<Point> _levels;
 
-    [SerializeField] private TextDetection _detectionCountCoin;
+    [SerializeField] private int _lives;
 
-    [SerializeField] private Coin _coin;
-
-    [SerializeField] private int _live = 2;
-    [SerializeField] private Vector3 _offsetMoveOfSpike;
-
-    private float _moveInput => Input.GetAxis("Horizontal");
-    private Vector3 _moveVector => new Vector3(_offsetMoveOfSpike.x * (_moveInput == 0 ? 1 : _moveInput), _offsetMoveOfSpike.y, 0);
+    public bool IsInfinity { get; set; } = false;
 
     private void Start()
     {
-        _coin.Init(_detectionCountCoin.ChangeStatus);
+        OnDeth death = new OnDeth(ref OnDebugEvects);
+        OnDemage demage = new OnDemage(ref OnDebugEvects, _lives);
 
-        _save.GeneratScene(transform, _levels);
-    }
-    private void OnDestroy()
-    {
-        _coin.DestroyEvent(_detectionCountCoin.ChangeStatus);
+        _coins.Init(_textChanger.ChangeStatus, ref OnPuckEvent, ref OnFinishEvent);
+        _saves.Init(transform, _levels, ref OnFinishEvent);
+        _rection.Init(ref OnDebugEvects);
+
+        OnFinishEvent += Respawn;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Coin"))
-        {
-            _coin.PuckUpResors();
-            Destroy(other.gameObject);
-        }
-        if (other.CompareTag("Respawn"))
-        {
-            SceneControler.SetScene();
-        }
-        if (other.CompareTag("Spike"))
-        {
-            _live--;
-            transform.position += _moveVector;
-            if (_live <= 0)
-                SceneControler.SetScene();
-        }
+        OnDebugEvects?.Invoke(other, IsInfinity);
+        OnFinishEvent?.Invoke(other);
+        OnPuckEvent?.Invoke(other);
+    }
+
+    private void Respawn(Collider2D other)
+    {
         if (other.CompareTag("Finish"))
-        {
-            _coin.SaveResolt();
-            _save.SavePoint();
             SceneControler.SetScene();
-        }
     }
 }
 
-[System.Serializable]
-public class Point
+/*
+public static event Action<Collider2D, bool> OnDeath;
+public static event Action<Collider2D> Finish;
+public static event Action<Collider2D> Coster;
+public static event Action<Collider2D> OnMoveAtTrigger;
+public static event Action<Collider2D> OnMoveForTrigger;
+
+[SerializeField] private List<Point> _levels;
+
+[SerializeField] private TextDetection _detectionCountCoin;
+[SerializeField] private Coin _coin;
+[SerializeField] private Save _save;
+[SerializeField] private Lives _lives;
+
+[SerializeField] private bool _isInvinityLeave = false;
+
+private void Start()
 {
-    public GameObject Level;
-    public Transform SavePoint;
+    _lives = new Lives(ref OnDeath, Respawn);
+    _save.GeneratScene(transform, _levels);
+    _coin.Init(_detectionCountCoin.ChangeStatus);
+
+    OnDeath += Death;
+    Finish += Finishs;
+    Coster += CounUp;
+}
+private void OnDestroy()
+{
+    _coin.DestroyEvent(_detectionCountCoin.ChangeStatus);
+
+    OnDeath -= Death;
+    Finish -= Finishs;
+    Coster -= CounUp;
+}
+
+private void OnTriggerEnter2D(Collider2D other)
+{
+    Coster?.Invoke(other);
+    Finish?.Invoke(other);
+    OnDeath?.Invoke(other, _isInvinityLeave);
+}
+private void OnTriggerStay2D(Collider2D other)
+{
+    OnMoveAtTrigger?.Invoke(other);
+}
+
+private void OnTriggerExit2D(Collider2D other)
+{
+    OnMoveForTrigger?.Invoke(other);
+}
+private void CounUp(Collider2D other)
+{
+    if (other.CompareTag("Coin"))
+    {
+        _coin.PuckUpResors();
+        Destroy(other.gameObject);
+    }
+}
+private void Finishs(Collider2D other)
+{
+    if (other.CompareTag("Finish"))
+    {
+        _coin.SaveResolt();
+        _save.SavePoint();
+        Respawn();
+    }
+}
+private void Death(Collider2D other, bool isInvinity)
+{
+    if (other.CompareTag("Respawn") && !isInvinity) Respawn();
+}
+
+private void Respawn() => SceneControler.SetScene();
+
+}*/
+
+[Serializable]
+class RectionAtObject
+{
+    [SerializeField] private JumpData _jump;
+
+    [SerializeField] private PlayerData _player;
+
+    public void Init(ref Action<Collider2D, bool> OnMoveEvent)
+    {
+        OnMoveEvent += OnMove;
+    }
+
+    private void OnMove(Collider2D other, bool isInfinity)
+    {
+        if (other.CompareTag("Spike") && !isInfinity || other.CompareTag("Jumpl"))
+            _player.MoveCharacter.MoveOfJumpState(_jump);
+    }
+}
+
+class OnDeth
+{
+    public OnDeth(ref Action<Collider2D, bool> onDeath)
+    {
+        onDeath += Death;
+    }
+
+    private void Death(Collider2D other, bool isInfinite)
+    {
+        if (other.CompareTag("Respawn") && !isInfinite)
+            SceneControler.SetScene();
+    }
+}
+
+class OnDemage
+{
+    private int _lives = 2;
+
+    public OnDemage(ref Action<Collider2D, bool> onDeath, int lives)
+    {
+        onDeath += Death;
+
+        _lives = lives;
+    }
+
+    private void Death(Collider2D other, bool isInfinite)
+    {
+        if (other.CompareTag("Spike") && !isInfinite)
+        {
+            _lives--;
+            Debug.Log("Игрок получил урон");
+            if (_lives < 0)
+                SceneControler.SetScene();
+        }
+    }
 }
