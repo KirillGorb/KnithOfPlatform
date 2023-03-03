@@ -4,47 +4,34 @@ using UnityEngine;
 [CreateAssetMenu()]
 public class Coin : ScriptableObject, IResors
 {
-    public event Action<string> ChangeResors;
-
     public int CountResorses { get; set; }
 
     private int _localCountResorses = 0;
 
-    public void Init(Action<string> changer, ref Action<Collider2D> onPuckEvent, ref Action<Collider2D> OnFinishEvent)
+    private TextDetection _text;
+
+    public void Init(TextDetection text)
     {
-        ChangeResors += changer;
-        ChangeResors?.Invoke(CountResorses + "");
+        _text = text;
+        _text.ChangeStatus(CountResorses + "");
 
         _localCountResorses = 0;
-
-        onPuckEvent += PuckUpCoin;
-        OnFinishEvent += SaveResolt;
     }
 
-    private void PuckUpCoin(Collider2D other)
+    public void SaveResolt()
     {
-        if (other.CompareTag("Coin"))
-        {
-            Destroy(other.gameObject);
-            PuckUpResors();
-        }
-    }
-
-    private void SaveResolt(Collider2D other)
-    {
-        if (other.CompareTag("Finish"))
-            CountResorses += _localCountResorses;
+        CountResorses += _localCountResorses;
     }
 
     public void PuckDownResors(int countResors = 1)
     {
         _localCountResorses -= countResors;
-        ChangeResors?.Invoke(_localCountResorses + CountResorses + "");
+        _text.ChangeStatus(_localCountResorses + CountResorses + "");
     }
 
     public void PuckUpResors(int countResors = 1)
     {
         _localCountResorses += countResors;
-        ChangeResors?.Invoke(_localCountResorses + CountResorses + "");
+        _text.ChangeStatus(_localCountResorses + CountResorses + "");
     }
 }

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf38852f649f08345ba1241c6e35db68, type: 3}
+  m_Name: StandartMove
+  m_EditorClassIdentifier: 
+  _datas:
+  - _data:
+      ValueScale: 7
+      HightValue: 0
+    States: 0
+  - _data:
+      ValueScale: 0
+      HightValue: 0
+    States: 1
+  - _data:
+      ValueScale: 7
+      HightValue: 0.5
+    States: 2
+  - _data:
+      ValueScale: 9
+      HightValue: 0.6
+    States: 2

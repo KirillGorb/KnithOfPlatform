@@ -1,32 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class MoveCharacter
+[CreateAssetMenu()]
+public class MoveCharacter : ScriptableObject
 {
     [Header("Прыжок")]
-    [SerializeField] private float _gravityScale;
-    [SerializeField] private JumpData _jump;
-
-    [Header("Бег")]
-    [SerializeField] private float _speed = 3;
+    [SerializeField] private List<MovesData> _datas;
 
     private Moveble _move;
 
-    public void SetStartMoveState()
-    {
-        _move = new Moveble(_gravityScale, _jump);
-    }
+    public void SetStartMoveState() => _move = new Moveble(_datas);
 
-    public Vector2 MoveOfStates(bool isMove, float moveInputHorizontal, bool isJump, bool isGroundCheck)
-    {
-        if (isMove)
-            return new Vector2(_speed * moveInputHorizontal, _move.Updata(isGroundCheck, isJump));
-        else
-            return Vector2.zero;
-    }
+    public float MoveUp(bool isMoveUp, bool isJump, bool isGroundCheck, bool isGroundCheckJump) =>
+        isMoveUp ? _move.MoveUpOnState(isGroundCheck, isGroundCheckJump, isJump) : 0;
 
-    public void MoveOfJumpState(JumpData jump) => _move.SetJumpData(jump);
+    public void SetState(int idState) => _move.SetState(idState);
 }
 
 [Serializable]
@@ -42,118 +31,137 @@ public class GroundChecker
 
 public class Moveble
 {
-    private Gravity _gravity;
-    private State _state;
-    private Jump _jump;
+    private IMove _move = null;
 
-    private IMove _move;
+    private List<MovesData> _datas = new List<MovesData>();
 
-    private event Action ResetParametrs;
-    private event Action<bool> SetData;
-    private event Func<bool> IsData;
-
-    private JumpData _dataJump;
-
-    public Moveble(float gravityScale, JumpData jump)
+    public Moveble(List<MovesData> states)
     {
-        _dataJump = jump;
+        foreach (var item in states)
+            _datas.Add(item.SetMove());
 
-        _gravity = new Gravity(gravityScale, ref ResetParametrs);
-        _state = new State();
-        _jump = new Jump(_dataJump, ref SetData, ref IsData);
-
-        _move = _state;
+        SetState(_datas[1]);
     }
 
-    public float Updata(bool isGroundCheck, bool isJumpButtonClick)
+    public float MoveUpOnState(bool isGroundCheck, bool isGroundCheckJump, bool isJumpButtonClick)
     {
-        SwichMove(isGroundCheck, isJumpButtonClick);
+        if (!_move.IsActive())
+        {
+            if ((isGroundCheck || isGroundCheckJump) && isJumpButtonClick)
+                SetState(_datas[2]);
+            else if (isGroundCheck)
+                SetState(_datas[1]);
+            else
+                SetState(_datas[0]);
+        }
+
         return _move.Move();
     }
 
-    public void SetJumpData(JumpData jump)
+    public void SetState(int id) => SetState(id > _datas.Count ? _datas[1] : _datas[id]);
+
+    public void SetState(MovesData data)
     {
-        _jump.SetJumpData(jump);
-        _move = _jump;
-        SetData?.Invoke(true);
-    }
+        if (_move == data._move) return;
 
-    private void SwichMove(bool isGroundCheck, bool isJumpButtonClick)
-    {
-        if (IsData.Invoke()) return;
+        _move = data._move;
+        _move.SetData(data._data);
 
-        MoveDetect(isGroundCheck && isJumpButtonClick, () => { _jump.SetJumpData(_dataJump); SetData?.Invoke(true); }, _jump);
-        MoveDetect(isGroundCheck && !isJumpButtonClick, null, _state);
-        MoveDetect(!isGroundCheck, null, _gravity);
-    }
-
-    private void MoveDetect(bool isDetect, Action events, IMove move)
-    {
-        if (isDetect && _move != move)
-        {
-            _move = move;
-
-            events?.Invoke();
-            ResetParametrs?.Invoke();
-
-            Debug.Log(_move.ToString());
-        }
+        Debug.Log(_move.ToString());
     }
 }
 
+[Serializable]
+public class MovesData
+{
+    public IMove _move;
+    public MoveUpData _data;
+    public State States;
+
+    public MovesData SetMove()
+    {
+        _move = SetMoveState();
+        return new MovesData(_move, _data);
+    }
+    public MovesData(IMove move, MoveUpData data)
+    {
+        _move = move;
+        _data = data;
+    }
+
+    private IMove SetMoveState()
+    {
+        switch (States)
+        {
+            case State.Gravity:
+                return new Gravity();
+            case State.Idel:
+                return new Idel();
+            case State.Jump:
+                return new Jump();
+            default:
+                return new Idel();
+        }
+    }
+
+    public MovesData SetNewMoveUp(MoveUpData _data) => new MovesData(_move, _data);
+
+    public enum State
+    {
+        Gravity,
+        Idel,
+        Jump
+    }
+}
 
 
 
 public interface IMove
 {
+    void SetData(MoveUpData data);
     float Move();
+    bool IsActive();
 }
 
 
 public class Gravity : IMove
 {
-    private float _gravityScale;
-    private float _upMove;
+    private MoveUpData _data;
 
-    public Gravity(float gravityScale, ref Action resetData)
+    private float _velocityDown;
+
+    public void SetData(MoveUpData gravityScale)
     {
-        _gravityScale = gravityScale;
-
-        resetData += Start;
-        Start();
+        _data = gravityScale;
+        SetStartValue();
     }
+
     public float Move()
     {
-        _upMove += Time.deltaTime;
-        return -_gravityScale * _upMove;
+        _velocityDown += Time.deltaTime;
+        return -_data.ValueScale * _velocityDown;
     }
+    public bool IsActive() => false;
 
-    private void Start() => _upMove = 1;
+    private void SetStartValue()
+    {
+        _velocityDown = _data.HightValue;
+    }
 }
 
 
 public class Jump : IMove
 {
-    private JumpData _jump;
+    private MoveUpData _jump;
 
     private float _hightJump;
     private bool _isJump = false;
 
-    public Jump(JumpData jump, ref Action<bool> setJumpState, ref Func<bool> isJumpState)
+    public void SetData(MoveUpData jump)
     {
         _jump = jump;
-
-        setJumpState += SetJump;
-        isJumpState += IsJump;
-
-        Start();
-    }
-
-    public void SetJumpData(JumpData jump)
-    {
-        _jump = jump;
-
-        Start();
+        _isJump = true;
+        _hightJump = _jump.HightValue;
     }
 
     public float Move()
@@ -161,32 +169,34 @@ public class Jump : IMove
         if (_hightJump > 0 && _isJump)
             _hightJump -= Time.deltaTime;
         else
-            Start();
+            SetStartValue();
 
-        return _jump.JumpScale * _hightJump;
+        return _jump.ValueScale * _hightJump;
     }
 
-    private void SetJump(bool isJump) => _isJump = isJump;
-    private bool IsJump() => _isJump;
+    public bool IsActive() => _isJump;
 
-    private void Start()
+    private void SetStartValue()
     {
         _isJump = false;
-        _hightJump = _jump.StartHightJump;
+        _hightJump = _jump.HightValue;
     }
 }
 
-public class State : IMove
+public class Idel : IMove
 {
     public float Move() => 0;
+
+    public void SetData(MoveUpData data) { }
+    public bool IsActive() => false;
 }
 
 
 
 
 [Serializable]
-public struct JumpData
+public struct MoveUpData
 {
-    public float JumpScale;
-    public float StartHightJump;
+    public float ValueScale;
+    public float HightValue;
 }

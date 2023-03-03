@@ -218,19 +218,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d43c848bfab5e4face066244f77b87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveCharacter:
-    _gravityScale: 4
-    _jump:
-      JumpScale: 5
-      StartHightJump: 0.5
-    _speed: 3
+  _moveCharacter: {fileID: 11400000, guid: 32c7c17f464e1e343a9f28d4873c9046, type: 2}
   _groundChecker:
     _checkPlanceRadius: 0.1
     _checkGroundPoint: {fileID: 1316172659}
     _layersGrounds:
       serializedVersion: 2
       m_Bits: 1792
+  _groundCheckerJump:
+    _checkPlanceRadius: 0.2
+    _checkGroundPoint: {fileID: 1316172659}
+    _layersGrounds:
+      serializedVersion: 2
+      m_Bits: 1792
   _playerAinmation: {fileID: 2092912071393074496}
+  _speed: 3.5
 --- !u!114 &8881912202889463491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,7 +240,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2092912071393074497}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cb229dcd1dc1ee4ebd0a0c088820c30, type: 3}
   m_Name: 
@@ -260,15 +262,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f78e8f220ad7734685c708a26052bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EventOnTrggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1512836456}
+        m_MethodName: SetMoveUP
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _tagsEnter:
+  - Spike
+  - Jumpl
   _coins: {fileID: 11400000, guid: 9e9b0af8e1821f142848ee16ee647dca, type: 2}
   _saves: {fileID: 11400000, guid: f1f71fc29ff24f34888e1468b4fd962c, type: 2}
   _textChanger:
     _textChangeResors: {fileID: 0}
-  _rection:
-    _jump:
-      JumpScale: 9
-      StartHightJump: 0.5
-    _player: {fileID: 1512836456}
   _levels:
   - Level: {fileID: 0}
     SavePoint: {fileID: 0}
@@ -300,4 +314,3 @@ MonoBehaviour:
     SavePoint: {fileID: 0}
   - Level: {fileID: 0}
     SavePoint: {fileID: 0}
-  _lives: 2

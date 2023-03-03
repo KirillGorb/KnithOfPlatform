@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6373646276877153206}
   - component: {fileID: 6501598827436611524}
   - component: {fileID: -3250480911140645193}
+  - component: {fileID: 1075863275}
   m_Layer: 0
   m_Name: Coin_01
   m_TagString: Coin
@@ -118,3 +119,43 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.512
+--- !u!114 &1075863275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014005630850187154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c733ce433e9e204d839f7996fae4a3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventOnTrggerEnterPlayer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1075863275}
+        m_MethodName: DestroyObject
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: 9e9b0af8e1821f142848ee16ee647dca, type: 2}
+        m_MethodName: PuckUpResors
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  EventOnTrggerEnter:
+    m_PersistentCalls:
+      m_Calls: []

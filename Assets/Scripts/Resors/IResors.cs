@@ -2,7 +2,7 @@
 
 public interface IResors
 {
-    event Action<string> ChangeResors;
+   // event Action<string> ChangeResors;
 
     int CountResorses { get; set; }
 

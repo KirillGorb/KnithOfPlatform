@@ -5,7 +5,10 @@ public class PlayerData : MonoBehaviour
 {
     [SerializeField] private MoveCharacter _moveCharacter;
     [SerializeField] private GroundChecker _groundChecker;
+    [SerializeField] private GroundChecker _groundCheckerJump;
     [SerializeField] private Animator _playerAinmation;
+
+    [SerializeField] private float _speed;
 
     private Rigidbody2D _rigidbody2D;
     private AnimationCharacter _animationPlayer;
@@ -15,8 +18,11 @@ public class PlayerData : MonoBehaviour
     public MoveCharacter MoveCharacter => _moveCharacter;
 
     private float MoveInputHorizontal => Input.GetAxis("Horizontal");
+    private float MoveUp => _moveCharacter.MoveUp(_isMove, JumpInput, _groundChecker.IsGrounds, _groundCheckerJump.IsGrounds);
+
     private bool JumpInput => Input.GetKey(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow);
 
+    public void SetMoveUP(int id) => _moveCharacter.SetState(id);
 
     private void Awake()
     {
@@ -32,7 +38,7 @@ public class PlayerData : MonoBehaviour
         Animation();
         Move();
     }
+    private void Move() => _rigidbody2D.velocity = new Vector2(MoveInputHorizontal * _speed, MoveUp);
 
-    private void Move() => _rigidbody2D.velocity = _moveCharacter.MoveOfStates(_isMove, MoveInputHorizontal, JumpInput, _groundChecker.IsGrounds);
-    private void Animation() => _animationPlayer.Animation(MoveInputHorizontal, _groundChecker.IsGrounds);
+    private void Animation() => _animationPlayer.Animation(MoveInputHorizontal, _groundCheckerJump.IsGrounds);
 }

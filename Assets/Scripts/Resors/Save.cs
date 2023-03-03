@@ -7,10 +7,9 @@ public class Save : ScriptableObject
 {
     [SerializeField] private int _idLevel = 1;
 
-    public void Init(Transform player, List<Point> point, ref Action<Collider2D> OnFinishEvent)
+    public void Init(Transform player, List<Point> point)
     {
         GeneratScene(player, point);
-        OnFinishEvent += OnSaveLevel;
     }
 
     public void SetStartGame()
@@ -23,19 +22,13 @@ public class Save : ScriptableObject
         SceneControler.SetScene();
     }
 
-    private void OnSaveLevel(Collider2D other)
-    {
-        if (other.CompareTag("Finish"))
-            SavePoint();
-    }
-
     private void GeneratScene(Transform player, List<Point> point)
     {
         point[IdLevel(point)].Level.SetActive(true);
         player.position = point[IdLevel(point)].SavePoint.position;
     }
 
-    private void SavePoint(int count = 1) => _idLevel += count;
+    public void SavePoint(int count = 1) => _idLevel += count;
 
     private int IdLevel(List<Point> point) => _idLevel - 1 <= point.Count - 1 ? _idLevel - 1 : point.Count - 1;
 }
