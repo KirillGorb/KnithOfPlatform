@@ -65,8 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Elements\MoveObjectAtPoints.cs" />
+    <Compile Include="Assets\Scripts\NewScripts\AuraWeapon.cs" />
     <Compile Include="Assets\Scripts\NewScripts\EP.cs" />
     <Compile Include="Assets\Scripts\NewScripts\Enemies.cs" />
+    <Compile Include="Assets\Scripts\NewScripts\MeleeWeapon.cs" />
+    <Compile Include="Assets\Scripts\NewScripts\RangedWeapon.cs" />
     <Compile Include="Assets\Scripts\Player\AnimationCharacter.cs" />
     <Compile Include="Assets\Scripts\Player\MoveCharacter.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
