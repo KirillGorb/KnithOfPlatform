@@ -8,11 +8,9 @@ public class AuraWeapon : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other .TryGetComponent(out EnemyMovement enemy))
         {
-            // Deal damage to the enemy
-            Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.TakeDamage(damage * Time.deltaTime);
+            enemy.TakeDamage (damage * Time.deltaTime);
         }
     }
 }

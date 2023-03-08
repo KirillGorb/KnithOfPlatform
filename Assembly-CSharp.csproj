@@ -66,8 +66,10 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Elements\MoveObjectAtPoints.cs" />
     <Compile Include="Assets\Scripts\NewScripts\AuraWeapon.cs" />
-    <Compile Include="Assets\Scripts\NewScripts\EP.cs" />
-    <Compile Include="Assets\Scripts\NewScripts\Enemies.cs" />
+    <Compile Include="Assets\Scripts\NewScripts\Character.cs" />
+    <Compile Include="Assets\Scripts\NewScripts\DamageTrigger.cs" />
+    <Compile Include="Assets\Scripts\NewScripts\EnemySpawner.cs" />
+    <Compile Include="Assets\Scripts\NewScripts\Health.cs" />
     <Compile Include="Assets\Scripts\NewScripts\MeleeWeapon.cs" />
     <Compile Include="Assets\Scripts\NewScripts\RangedWeapon.cs" />
     <Compile Include="Assets\Scripts\Player\AnimationCharacter.cs" />
@@ -81,7 +83,6 @@
     <Compile Include="Assets\Scripts\Resors\TriggerControlerItem.cs" />
     <Compile Include="Assets\Scripts\UI\SceneControler.cs" />
     <Compile Include="Assets\Scripts\UI\TextDetection.cs" />
-    <Compile Include="Assets\movmentTest.cs" />
     <Reference Include="UnityEngine">
       <HintPath>D:/unity/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

@@ -10,23 +10,19 @@ public class RangedWeapon : MonoBehaviour
 
     private void Start()
     {
-        // Destroy the projectile after its lifetime expires
         Destroy(gameObject, lifetime);
     }
 
     private void FixedUpdate()
     {
-        // Move the projectile forward
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.TryGetComponent(out EnemySpawner enemy))
         {
-            // Deal damage to the enemy
-            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-            enemy.TakeDamage(damage);
+           enemy.TakeDamage(damage);
             Destroy(gameObject);
         }
     }

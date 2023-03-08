@@ -4,38 +4,38 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;
-    public Transform characterTransform;
-    public float spawnRadius = 10f;
-    public float enemySpeed = 5f;
-    public int maxEnemies = 5;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private Transform characterTransform;
+    [SerializeField] private float spawnRadius = 10f;
+    [SerializeField] private float enemySpeed = 5f;
+    [SerializeField] private int maxEnemies = 5;
 
-    private List<GameObject> enemies = new List<GameObject>();
+    private List<GameObject> _enemies = new List<GameObject>();
 
-    void Update()
+    private void Update()
     {
         // Check if we need to spawn a new enemy
-        if (enemies.Count < maxEnemies)
+        if (_enemies.Count < maxEnemies)
         {
             SpawnEnemy();
         }
 
         // Remove any dead enemies
-        for (int i = enemies.Count - 1; i >= 0; i--)
+        for (int i = _enemies.Count - 1; i >= 0; i--)
         {
-            if (enemies[i] == null)
+            if (_enemies[i] == null)
             {
-                enemies.RemoveAt(i);
+                _enemies.RemoveAt(i);
             }
         }
     }
 
-    void SpawnEnemy()
+    public void SpawnEnemy()
     {
         Vector3 spawnPosition = Random.insideUnitCircle * spawnRadius;
         spawnPosition += characterTransform.position;
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        enemies.Add(enemy);
+        _enemies.Add(enemy);
         EnemyMovement enemyMovement = enemy.GetComponent<EnemyMovement>();
         enemyMovement.characterTransform = characterTransform;
         enemyMovement.speed = enemySpeed;

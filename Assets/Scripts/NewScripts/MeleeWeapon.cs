@@ -10,10 +10,9 @@ public class MeleeWeapon : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy" && canAttack)
+        if (collision.gameObject.TryGetComponent (out EnemySpawner enemy) && canAttack)
         {
-            // Deal damage to the enemy and start cooldown
-            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            
             enemy.TakeDamage(damage);
             StartCoroutine(AttackCooldown());
         }
@@ -21,7 +20,6 @@ public class MeleeWeapon : MonoBehaviour
 
     private IEnumerator AttackCooldown()
     {
-        // Wait for cooldown before attacking again
         canAttack = false;
         yield return new WaitForSeconds(cooldown);
         canAttack = true;
