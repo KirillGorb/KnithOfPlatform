@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class HealthScript : MonoBehaviour
 {
-    public int health;
-    public int maxHealth;
+    [SerializeField]private int maxHealth;
+    private int health;
 
-    private void Start()
+    private void Awake()
+        
     {
         health = maxHealth;
     }
@@ -27,8 +28,7 @@ public class HealthScript : MonoBehaviour
     }
 
     private void Die()
-    {
-        // Add code for when the object dies here
+    { 
     }
 }
 
