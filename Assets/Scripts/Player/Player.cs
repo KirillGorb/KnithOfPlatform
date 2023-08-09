@@ -14,7 +14,7 @@ namespace Player
         private Rigidbody2D _rigidbody2D;
         private AnimationCharacter _animationPlayer;
 
-        private float MoveInputHorizontal => Input.GetAxis("Horizontal");
+        private float MoveInputHorizontal => Input.GetAxisRaw("Horizontal");
         private bool JumpInput => Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow);
 
         private void Awake()
